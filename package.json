@@ -1,0 +1,41 @@
+{
+  "name": "starlight-i18n",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "",
+  "author": "HiDeoo <github@hideoo.dev> (https://hideoo.dev)",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test implemented.\" && exit 1",
+    "lint": "prettier -c --cache . && eslint . --cache --max-warnings=0 && tsc --noEmit",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@hideoo/eslint-config": "2.0.1",
+    "@hideoo/prettier-config": "2.0.0",
+    "@hideoo/tsconfig": "2.0.1",
+    "eslint": "8.49.0",
+    "husky": "8.0.3",
+    "lint-staged": "14.0.1",
+    "prettier": "3.0.3",
+    "typescript": "5.2.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@8.7.5",
+  "private": true,
+  "sideEffects": false,
+  "keywords": [],
+  "homepage": "https://github.com/HiDeoo/starlight-i18n",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HiDeoo/starlight-i18n.git"
+  },
+  "bugs": "https://github.com/HiDeoo/starlight-i18n/issues",
+  "prettier": "@hideoo/prettier-config",
+  "lint-staged": {
+    "**/*": "prettier -w -u --cache",
+    "**/*.{js,jsx,ts,tsx,cjs,mjs}": "eslint --cache --max-warnings=0"
+  }
+}

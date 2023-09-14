@@ -40,6 +40,14 @@ export async function getContentPagesStatuses(uris: StarlightUris, localesConfig
   return statuses
 }
 
+export async function getPageRawFrontmatter(page: Uri) {
+  const data = await workspace.fs.readFile(page)
+  const content = Buffer.from(data).toString('utf8')
+  const matches = content.match(/^(---\n[\S\s]*?\n---)\n/)
+
+  return matches ? matches[1] : ''
+}
+
 async function getContentPagesByLocale(uris: StarlightUris, localesConfig: LocalesConfig) {
   const pages = await getContentPages(uris, localesConfig)
   const pagesByLocale: Record<string, Record<Page['id'], Page>> = {}

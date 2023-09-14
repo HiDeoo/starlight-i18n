@@ -12,7 +12,7 @@ import {
 } from 'vscode'
 
 import type { Locale, StarlightUris } from './config'
-import type { PageStatus, PageStatusesByLocale } from './content'
+import { getPageRawFrontmatter, type PageStatus, type PageStatusesByLocale } from './content'
 import { getCommitBeforeDate, getGitUri } from './git'
 
 export async function pickTranslation(
@@ -137,14 +137,13 @@ function createStatusesQuickPickItem(
 }
 
 async function prepareMissingTranslation({ localeDirectory, status }: Translation, uris: StarlightUris) {
-  await window.showTextDocument(status.source.file, { viewColumn: ViewColumn.One })
-
+  const sourceFrontmatter = await getPageRawFrontmatter(status.source.file)
   const translationUri = Uri.joinPath(uris.content, localeDirectory, status.source.id)
 
-  await workspace.fs.writeFile(translationUri, new Uint8Array(0))
-  await window.showTextDocument(translationUri, { preview: false, viewColumn: ViewColumn.Two })
+  await workspace.fs.writeFile(translationUri, new TextEncoder().encode(`${sourceFrontmatter}\n\n`))
 
-  // TODO(HiDeoo) add frontmatter to the translation file
+  await window.showTextDocument(status.source.file, { viewColumn: ViewColumn.One })
+  await window.showTextDocument(translationUri, { preview: false, viewColumn: ViewColumn.Two })
 }
 
 async function prepareOutdatedTranslation({ status }: Translation) {

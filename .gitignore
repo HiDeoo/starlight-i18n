@@ -28,6 +28,7 @@ npm-debug.log*
 out
 pnpm-debug.log*
 releases
+starlight-i18n-**.vsix
 test-results
 yarn-debug.log*
 yarn-error.log*

@@ -83,9 +83,9 @@
     "Other"
   ],
   "preview": true,
-  "icon": "// TODO(HiDeoo) ",
+  "icon": "assets/icon.png",
   "galleryBanner": {
-    "color": "// TODO(HiDeoo) ",
+    "color": "#7a8194",
     "theme": "dark"
   },
   "badges": [

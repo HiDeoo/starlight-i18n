@@ -1,6 +1,5 @@
 <div align="center">
-  // TODO(HiDeoo)
-  <img alt="Starlight i18n extension icon" src="https://i.imgur.com/R2xcaBh.png" width="128" />
+  <img alt="Starlight i18n extension icon" src="https://i.imgur.com/0PE6Nbo.png" width="128" />
   <h1>Starlight i18n</h1>
 </div>
 

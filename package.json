@@ -7,7 +7,6 @@
   "main": "dist/extension.js",
   "scripts": {
     "build": "pnpm clean && node esbuild.config.mjs",
-    "test": "echo \"Error: no test implemented.\" && exit 1",
     "lint": "prettier -c --cache . && eslint . --cache --max-warnings=0 && tsc --noEmit",
     "clean": "rimraf dist",
     "prepare": "husky install"

@@ -10,8 +10,8 @@ on:
   workflow_call:
 
 jobs:
-  lint_test:
-    name: Lint & Test
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,6 +33,3 @@ jobs:
 
       - name: Lint
         run: pnpm lint
-
-      - name: Test
-        run: pnpm test

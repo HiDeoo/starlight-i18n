@@ -36,9 +36,17 @@ export function activate(context: ExtensionContext): void {
 
         await prepareTranslation(starlightUris, translation)
       } catch (error) {
-        // TODO(HiDeoo) log error
+        const isError = error instanceof Error
+        const message = isError ? error.message : 'Something went wrong!'
 
-        await window.showErrorMessage(error instanceof Error ? error.message : 'Something went wrong!')
+        const logger = window.createOutputChannel('Starlight i18n')
+        logger.appendLine(message)
+
+        if (isError && error.stack) {
+          logger.appendLine(error.stack)
+        }
+
+        await window.showErrorMessage(message)
       }
     }),
   )

@@ -2,40 +2,80 @@
   "name": "starlight-i18n",
   "version": "0.0.1",
   "license": "MIT",
-  "description": "",
+  "description": "// TODO(HiDeoo)",
   "author": "HiDeoo <github@hideoo.dev> (https://hideoo.dev)",
-  "type": "module",
+  "main": "dist/extension.js",
   "scripts": {
+    "build": "pnpm clean && node esbuild.config.mjs",
     "test": "echo \"Error: no test implemented.\" && exit 1",
     "lint": "prettier -c --cache . && eslint . --cache --max-warnings=0 && tsc --noEmit",
+    "clean": "rimraf dist",
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@babel/types": "7.22.17",
     "@hideoo/eslint-config": "2.0.1",
     "@hideoo/prettier-config": "2.0.0",
     "@hideoo/tsconfig": "2.0.1",
+    "@types/node": "18.17.15",
+    "@types/vscode": "1.75.0",
+    "esbuild": "0.19.2",
     "eslint": "8.49.0",
     "husky": "8.0.3",
     "lint-staged": "14.0.1",
     "prettier": "3.0.3",
+    "rimraf": "5.0.1",
     "typescript": "5.2.2"
   },
   "engines": {
-    "node": ">=18"
+    "vscode": "^1.75.0"
   },
   "packageManager": "pnpm@8.7.5",
   "private": true,
   "sideEffects": false,
-  "keywords": [],
+  "keywords": [
+    "// TODO(HiDeoo)"
+  ],
   "homepage": "https://github.com/HiDeoo/starlight-i18n",
   "repository": {
     "type": "git",
     "url": "https://github.com/HiDeoo/starlight-i18n.git"
   },
   "bugs": "https://github.com/HiDeoo/starlight-i18n/issues",
+  "contributes": {
+    "commands": [
+      {
+        "command": "starlight-i18n.start",
+        "title": "// TODO(HiDeoo) "
+      }
+    ],
+    "configuration": {
+      "title": "Starlight i18n",
+      "properties": {
+        "starlight-i18n.configDirectories": {
+          "default": [
+            ".",
+            "./docs"
+          ],
+          "description": "// TODO(HiDeoo) ",
+          "type": "array"
+        }
+      }
+    }
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "displayName": "Starlight i18n",
+  "publisher": "hideoo",
   "prettier": "@hideoo/prettier-config",
   "lint-staged": {
     "**/*": "prettier -w -u --cache",
     "**/*.{js,jsx,ts,tsx,cjs,mjs}": "eslint --cache --max-warnings=0"
+  },
+  "dependencies": {
+    "magicast": "0.2.10"
   }
 }

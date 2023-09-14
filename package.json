@@ -2,7 +2,7 @@
   "name": "starlight-i18n",
   "version": "0.0.1",
   "license": "MIT",
-  "description": "// TODO(HiDeoo)",
+  "description": "Easily translate Starlight documentation pages.",
   "author": "HiDeoo <github@hideoo.dev> (https://hideoo.dev)",
   "main": "dist/extension.js",
   "scripts": {
@@ -33,7 +33,11 @@
   "private": true,
   "sideEffects": false,
   "keywords": [
-    "// TODO(HiDeoo)"
+    "starlight",
+    "documentation",
+    "internationalization",
+    "i18n",
+    "translation"
   ],
   "homepage": "https://github.com/HiDeoo/starlight-i18n",
   "repository": {
@@ -45,7 +49,7 @@
     "commands": [
       {
         "command": "starlight-i18n.start",
-        "title": "// TODO(HiDeoo) "
+        "title": "Starlight i18n"
       }
     ],
     "configuration": {
@@ -56,7 +60,7 @@
             ".",
             "./docs"
           ],
-          "description": "// TODO(HiDeoo) ",
+          "description": "The directories to look for Starlight configuration files in (relative to the workspace root).",
           "type": "array"
         }
       }
@@ -67,11 +71,35 @@
       "supported": true
     }
   },
+  "extensionKind": [
+    "workspace"
+  ],
   "extensionDependencies": [
     "vscode.git"
   ],
   "displayName": "Starlight i18n",
   "publisher": "hideoo",
+  "categories": [
+    "Other"
+  ],
+  "preview": true,
+  "icon": "// TODO(HiDeoo) ",
+  "galleryBanner": {
+    "color": "// TODO(HiDeoo) ",
+    "theme": "dark"
+  },
+  "badges": [
+    {
+      "url": "https://github.com/HiDeoo/starlight-i18n/actions/workflows/integration.yml/badge.svg",
+      "href": "https://github.com/HiDeoo/starlight-i18n/actions/workflows/integration.yml",
+      "description": "Integration Status"
+    },
+    {
+      "url": "https://badgen.net/github/license/hideoo/starlight-i18n",
+      "href": "https://github.com/HiDeoo/starlight-i18n/blob/main/LICENSE",
+      "description": "License"
+    }
+  ],
   "prettier": "@hideoo/prettier-config",
   "lint-staged": {
     "**/*": "prettier -w -u --cache",

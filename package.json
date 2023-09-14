@@ -9,6 +9,10 @@
     "build": "pnpm clean && node esbuild.config.mjs",
     "lint": "prettier -c --cache . && eslint . --cache --max-warnings=0 && tsc --noEmit",
     "clean": "rimraf dist",
+    "vscode:ls": "pnpx vsce ls --no-dependencies",
+    "vscode:package": "pnpx vsce package --no-dependencies",
+    "vscode:publish": "pnpx vsce publish --no-dependencies",
+    "vscode:prepublish": "pnpm build",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -45,6 +49,9 @@
     "url": "https://github.com/HiDeoo/starlight-i18n.git"
   },
   "bugs": "https://github.com/HiDeoo/starlight-i18n/issues",
+  "activationEvents": [
+    "onCommand:starlight-i18n.start"
+  ],
   "contributes": {
     "commands": [
       {

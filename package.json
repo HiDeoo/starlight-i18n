@@ -67,6 +67,9 @@
       "supported": true
     }
   },
+  "extensionDependencies": [
+    "vscode.git"
+  ],
   "displayName": "Starlight i18n",
   "publisher": "hideoo",
   "prettier": "@hideoo/prettier-config",

@@ -5,8 +5,6 @@ import { getContentPagesStatuses } from './libs/content'
 import { pickTranslation, prepareTranslation } from './libs/translation'
 import { isWorkspaceWithSingleFolder } from './libs/vsc'
 
-// TODO(HiDeoo) extension dependencies: vscode.git and vscode.diff
-
 export function activate(context: ExtensionContext): void {
   context.subscriptions.push(
     commands.registerCommand('starlight-i18n.start', async () => {

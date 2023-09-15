@@ -14,22 +14,15 @@
     </a>
   </p>
   <p>
-    // TODO(HiDeoo)
-    <a href="https://i.imgur.com/9IvyqoS.gif" title="Demo of the Create extension using fuzzy matching">
-      <img alt="Demo of the Create extension using fuzzy matching" src="https://i.imgur.com/9IvyqoS.gif" width="675" />
-    </a>
-  </p>
-  <p>
-    // TODO(HiDeoo)
-    <a href="https://i.imgur.com/7OnFzbj.gif" title="Demo of the Create extension using terminal-style autocomplete">
-      <img alt="Demo of the Create extension using terminal-style autocomplete" src="https://i.imgur.com/7OnFzbj.gif" width="675" />
+    <a href="https://i.imgur.com/VrpRCXK.gif" title="Demo of the Starlight i18n extension">
+      <img alt="Demo of the Starlight i18n extension" src="https://i.imgur.com/VrpRCXK.gif" width="675" />
     </a>
   </p>
 </div>
 
 ## Features
 
-Visual Studio Code extension to easily translate Starlight documentation pages using the built-in [support for multilingual sites](https://starlight.astro.build/guides/i18n/) and [git](https://git-scm.com/).
+Visual Studio Code extension to easily translate [Starlight](https://starlight.astro.build/) documentation pages using the built-in [support for multilingual sites](https://starlight.astro.build/guides/i18n/) and [git](https://git-scm.com/).
 
 - Collect supported languages from a Starlight configuration in a workspace repo or monorepo.
 - Pick a language and a page to translate.

@@ -1,0 +1,12 @@
+.eslintcache
+.github
+.gitignore
+.husky
+.prettierignore
+.vscode
+esbuild.config.mjs
+pnpm-lock.yaml
+src
+starlight-i18n-**.vsix
+tsconfig.json
+tsconfig.tsbuildinfo

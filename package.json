@@ -1,0 +1,118 @@
+{
+  "name": "starlight-i18n",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "Easily translate Starlight documentation pages.",
+  "author": "HiDeoo <github@hideoo.dev> (https://hideoo.dev)",
+  "main": "dist/extension.js",
+  "scripts": {
+    "build": "pnpm clean && node esbuild.config.mjs",
+    "lint": "prettier -c --cache . && eslint . --cache --max-warnings=0 && tsc --noEmit",
+    "clean": "rimraf dist",
+    "vscode:ls": "pnpx vsce ls --no-dependencies",
+    "vscode:package": "pnpx vsce package --no-dependencies",
+    "vscode:publish": "pnpx vsce publish --no-dependencies",
+    "vscode:prepublish": "pnpm build",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@babel/types": "7.22.17",
+    "@hideoo/eslint-config": "2.0.1",
+    "@hideoo/prettier-config": "2.0.0",
+    "@hideoo/tsconfig": "2.0.1",
+    "@types/node": "18.17.15",
+    "@types/vscode": "1.81.0",
+    "esbuild": "0.19.2",
+    "eslint": "8.49.0",
+    "husky": "8.0.3",
+    "lint-staged": "14.0.1",
+    "prettier": "3.0.3",
+    "rimraf": "5.0.1",
+    "typescript": "5.2.2"
+  },
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "packageManager": "pnpm@8.7.5",
+  "private": true,
+  "sideEffects": false,
+  "keywords": [
+    "starlight",
+    "documentation",
+    "internationalization",
+    "i18n",
+    "translation"
+  ],
+  "homepage": "https://github.com/HiDeoo/starlight-i18n",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HiDeoo/starlight-i18n.git"
+  },
+  "bugs": "https://github.com/HiDeoo/starlight-i18n/issues",
+  "activationEvents": [
+    "onCommand:starlight-i18n.start"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "starlight-i18n.start",
+        "title": "Starlight i18n"
+      }
+    ],
+    "configuration": {
+      "title": "Starlight i18n",
+      "properties": {
+        "starlight-i18n.configDirectories": {
+          "default": [
+            ".",
+            "./docs"
+          ],
+          "description": "The directories to look for Starlight configuration files in (relative to the workspace root).",
+          "type": "array"
+        }
+      }
+    }
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "extensionKind": [
+    "workspace"
+  ],
+  "extensionDependencies": [
+    "vscode.git"
+  ],
+  "displayName": "Starlight i18n",
+  "publisher": "hideoo",
+  "categories": [
+    "Other"
+  ],
+  "preview": true,
+  "icon": "assets/icon.png",
+  "galleryBanner": {
+    "color": "#7a8194",
+    "theme": "dark"
+  },
+  "badges": [
+    {
+      "url": "https://github.com/HiDeoo/starlight-i18n/actions/workflows/integration.yml/badge.svg",
+      "href": "https://github.com/HiDeoo/starlight-i18n/actions/workflows/integration.yml",
+      "description": "Integration Status"
+    },
+    {
+      "url": "https://badgen.net/github/license/hideoo/starlight-i18n",
+      "href": "https://github.com/HiDeoo/starlight-i18n/blob/main/LICENSE",
+      "description": "License"
+    }
+  ],
+  "prettier": "@hideoo/prettier-config",
+  "lint-staged": {
+    "**/*": "prettier -w -u --cache",
+    "**/*.{js,jsx,ts,tsx,cjs,mjs}": "eslint --cache --max-warnings=0"
+  },
+  "dependencies": {
+    "magicast": "0.2.10"
+  }
+}

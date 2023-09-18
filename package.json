@@ -7,6 +7,7 @@
   "main": "dist/extension.js",
   "scripts": {
     "build": "pnpm clean && node esbuild.config.mjs",
+    "test": "vitest",
     "lint": "prettier -c --cache . && eslint . --cache --max-warnings=0 && tsc --noEmit",
     "clean": "rimraf dist",
     "vscode:ls": "pnpx vsce ls --no-dependencies",
@@ -15,11 +16,16 @@
     "vscode:prepublish": "pnpm build",
     "prepare": "husky install"
   },
+  "dependencies": {
+    "@babel/parser": "7.22.16",
+    "@babel/traverse": "7.22.20",
+    "@babel/types": "7.22.19"
+  },
   "devDependencies": {
-    "@babel/types": "7.22.17",
     "@hideoo/eslint-config": "2.0.1",
     "@hideoo/prettier-config": "2.0.0",
     "@hideoo/tsconfig": "2.0.1",
+    "@types/babel__traverse": "7.20.2",
     "@types/node": "18.17.15",
     "@types/vscode": "1.81.0",
     "esbuild": "0.19.2",
@@ -28,7 +34,8 @@
     "lint-staged": "14.0.1",
     "prettier": "3.0.3",
     "rimraf": "5.0.1",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "vitest": "0.34.4"
   },
   "engines": {
     "vscode": "^1.81.0"
@@ -111,8 +118,5 @@
   "lint-staged": {
     "**/*": "prettier -w -u --cache",
     "**/*.{js,jsx,ts,tsx,cjs,mjs}": "eslint --cache --max-warnings=0"
-  },
-  "dependencies": {
-    "magicast": "0.2.10"
   }
 }

@@ -8,5 +8,6 @@ esbuild.config.mjs
 pnpm-lock.yaml
 src
 starlight-i18n-**.vsix
+tests
 tsconfig.json
 tsconfig.tsbuildinfo

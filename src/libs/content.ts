@@ -20,7 +20,7 @@ export async function getContentPagesStatuses(uris: StarlightUris, localesConfig
   const statuses: PageStatusesByLocale = {}
 
   for (const [localeDirectory, locale] of Object.entries(localesConfig.locales)) {
-    if (localeDirectory === 'root' || localeDirectory === localesConfig.defaultLocale) {
+    if (localeDirectory === localesConfig.defaultLocale) {
       continue
     }
 

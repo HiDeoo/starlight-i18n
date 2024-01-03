@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Fix path issue when no root locale is defined.
 - Fix issue with some commit being incorrectly ignored.
+- Clear quick pick input after selecting a locale.
 
 ## v0.1.1
 

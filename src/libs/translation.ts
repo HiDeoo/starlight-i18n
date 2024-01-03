@@ -115,6 +115,7 @@ function onPickLocale(picker: TranslationPicker, localeItem: LocaleQuickPickItem
     ...createStatusesQuickPickItem(missing, localeItem, 'Missing', 'diff-insert'),
   ]
 
+  picker.value = ''
   picker.placeholder = 'Select a page to translate'
   picker.step = 2
 }

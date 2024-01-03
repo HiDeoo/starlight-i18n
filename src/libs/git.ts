@@ -16,7 +16,8 @@ export async function getFileChanges(file: Uri): Promise<GitFileChanges> {
     throw new Error(`Failed to find the last commit for the file at '${file.fsPath}'.`)
   }
 
-  const previousCommit = commits.find((commit) => !ignoredCommitPattern.test(commit.message)) ?? lastCommit
+  const previousCommit =
+    commits.find((commit) => !ignoredCommitPattern.test(commit.message.split('\n')[0] ?? '')) ?? lastCommit
 
   if (!lastCommit.commitDate || !previousCommit.commitDate) {
     throw new Error(`Failed to find commit dates for the file at '${file.fsPath}'.`)

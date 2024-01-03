@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### 🐞 Bug Fixes
 
 - Fix path issue when no root locale is defined.
+- Fix issue with some commit being incorrectly ignored.
 
 ## v0.1.1
 

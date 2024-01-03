@@ -78,10 +78,18 @@ async function getContentPages(uris: StarlightUris, localesConfig: LocalesConfig
       const localeEntry = allLocales.find(([directory]) => directory === localeDirectory)
       const changes = await getFileChanges(file)
 
+      const isDefaultLocalePageWithNoRootLocale = !localeEntry && localeDirectory === localesConfig.defaultLocale
+
+      const id = localeEntry
+        ? localeId.join('/')
+        : isDefaultLocalePageWithNoRootLocale
+        ? relativePath.replace(`${localeDirectory}/`, '')
+        : relativePath
+
       return {
         changes,
         file,
-        id: localeEntry ? localeId.join('/') : relativePath,
+        id,
         locale: localeEntry ? localeEntry[1] : undefined,
         localeDirectory: localeEntry ? localeDirectory : undefined,
       }

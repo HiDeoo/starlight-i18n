@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### 🐞 Bug Fixes
+
+- Fix path issue when no root locale is defined.
+
 ## v0.1.1
 
 ### 🏎 Performance

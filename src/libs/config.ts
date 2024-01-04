@@ -48,7 +48,15 @@ export async function getStarlightLocalesConfig(configUri: Uri): Promise<Locales
   const configData = await workspace.fs.readFile(configUri)
   const configStr = Buffer.from(configData).toString('utf8')
 
-  return getStarlightLocalesConfigFromCode(configStr)
+  return getStarlightLocalesConfigFromCode(configStr, async (relativePath) => {
+    try {
+      const jsonData = await workspace.fs.readFile(Uri.joinPath(Uri.joinPath(configUri, '..'), relativePath))
+
+      return Buffer.from(jsonData).toString('utf8')
+    } catch {
+      throw new Error('Failed to read imported JSON locales configuration.')
+    }
+  })
 }
 
 export interface Locale {

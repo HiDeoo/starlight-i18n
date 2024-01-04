@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### 🚀 Features
+
+- Support reading locales configuration from an imported relative JSON file.
+
 ### 🐞 Bug Fixes
 
 - Fix path issue when no root locale is defined.

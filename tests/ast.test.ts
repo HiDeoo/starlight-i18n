@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 
 import { getStarlightLocalesConfigFromCode } from '../src/libs/ast'
 
@@ -24,8 +24,8 @@ const expectedCommonLocales = {
   },
 }
 
-test('finds locales inlined in the configuration', () => {
-  const config = getStarlightLocalesConfigFromCode(`import { defineConfig } from 'astro/config';
+test('finds locales inlined in the configuration', async () => {
+  const config = await getStarlightLocalesTestConfigFromCode(`import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
@@ -41,8 +41,8 @@ export default defineConfig({
   expect(config.locales).toEqual(expectedCommonLocales)
 })
 
-test('finds locales referenced in the configuration', () => {
-  const config = getStarlightLocalesConfigFromCode(`import { defineConfig } from 'astro/config';
+test('finds locales referenced in the configuration', async () => {
+  const config = await getStarlightLocalesTestConfigFromCode(`import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 const locales = ${commonLocales}
@@ -60,8 +60,8 @@ export default defineConfig({
   expect(config.locales).toEqual(expectedCommonLocales)
 })
 
-test('finds locales referenced and exported in the configuration', () => {
-  const config = getStarlightLocalesConfigFromCode(`import { defineConfig } from 'astro/config';
+test('finds locales referenced and exported in the configuration', async () => {
+  const config = await getStarlightLocalesTestConfigFromCode(`import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export const locales = ${commonLocales}
@@ -79,9 +79,10 @@ export default defineConfig({
   expect(config.locales).toEqual(expectedCommonLocales)
 })
 
-test('throws with no locales configuration', () => {
-  expect(() =>
-    getStarlightLocalesConfigFromCode(`import { defineConfig } from 'astro/config';
+test('throws with no locales configuration', async () => {
+  await expect(
+    async () =>
+      await getStarlightLocalesTestConfigFromCode(`import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
@@ -91,12 +92,13 @@ export default defineConfig({
     }),
   ],
 });`),
-  ).toThrowError('Failed to find locales in Starlight configuration.')
+  ).rejects.toThrowError('Failed to find locales in Starlight configuration.')
 })
 
-test('throws with no locales to translate', () => {
-  expect(() =>
-    getStarlightLocalesConfigFromCode(`import { defineConfig } from 'astro/config';
+test('throws with no locales to translate', async () => {
+  await expect(
+    async () =>
+      await getStarlightLocalesTestConfigFromCode(`import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
@@ -109,12 +111,13 @@ export default defineConfig({
     }),
   ],
 });`),
-  ).toThrowError('Failed to find any Starlight locale to translate.')
+  ).rejects.toThrowError('Failed to find any Starlight locale to translate.')
 })
 
-test('throws with no locales to translate when using the `defaultLocale` property', () => {
-  expect(() =>
-    getStarlightLocalesConfigFromCode(`import { defineConfig } from 'astro/config';
+test('throws with no locales to translate when using the `defaultLocale` property', async () => {
+  await expect(
+    async () =>
+      await getStarlightLocalesTestConfigFromCode(`import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
@@ -128,12 +131,13 @@ export default defineConfig({
     }),
   ],
 });`),
-  ).toThrowError('Failed to find any Starlight locale to translate.')
+  ).rejects.toThrowError('Failed to find any Starlight locale to translate.')
 })
 
-test('throws with no default locale', () => {
-  expect(() =>
-    getStarlightLocalesConfigFromCode(`import { defineConfig } from 'astro/config';
+test('throws with no default locale', async () => {
+  await expect(
+    async () =>
+      await getStarlightLocalesTestConfigFromCode(`import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
@@ -147,16 +151,143 @@ export default defineConfig({
     }),
   ],
 });`),
-  ).toThrowError('Failed to find Starlight default locale.')
+  ).rejects.toThrowError('Failed to find Starlight default locale.')
 })
 
-test('throws with no starlight integration', () => {
-  expect(() =>
-    getStarlightLocalesConfigFromCode(`import { defineConfig } from 'astro/config';
+test('throws with no starlight integration', async () => {
+  await expect(
+    async () =>
+      await getStarlightLocalesTestConfigFromCode(`import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
   integrations: [],
 });`),
-  ).toThrowError('Failed to find the `starlight` integration in the Astro configuration.')
+  ).rejects.toThrowError('Failed to find the `starlight` integration in the Astro configuration.')
 })
+
+test('finds locales imported from a relative JSON file', async () => {
+  expect.assertions(3)
+
+  const config = await getStarlightLocalesTestConfigFromCode(
+    `import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+import locales from './locales.json';
+
+export default defineConfig({
+  integrations: [
+    starlight({
+      title: 'Starlight',
+      locales,
+    }),
+  ],
+});`,
+    (relativePath) => {
+      expect(relativePath).toBe('./locales.json')
+
+      return Promise.resolve(commonLocales)
+    },
+  )
+
+  expect(config.defaultLocale).toBe('en')
+  expect(config.locales).toEqual(expectedCommonLocales)
+})
+
+test('throws with empty imported JSON locales configuration', async () => {
+  await expect(
+    async () =>
+      await getStarlightLocalesTestConfigFromCode(
+        `import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+import locales from './locales.json';
+
+export default defineConfig({
+  integrations: [
+    starlight({
+      title: 'Starlight',
+      locales,
+    }),
+  ],
+});`,
+        () => Promise.resolve(''),
+      ),
+  ).rejects.toThrowError('The imported JSON locales configuration is empty.')
+})
+
+test('throws with invalid imported JSON locales configuration', async () => {
+  await expect(
+    async () =>
+      await getStarlightLocalesTestConfigFromCode(
+        `import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+import locales from './locales.json';
+
+export default defineConfig({
+  integrations: [
+    starlight({
+      title: 'Starlight',
+      locales,
+    }),
+  ],
+});`,
+        () => Promise.resolve('-'),
+      ),
+  ).rejects.toThrowError('Failed to parse imported JSON locales configuration.')
+})
+
+test('does not read non JSON locales configuration', async () => {
+  const readJSONSpy = vi.fn()
+
+  await expect(
+    async () =>
+      await getStarlightLocalesTestConfigFromCode(
+        `import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+import locales from './locales.js';
+
+export default defineConfig({
+  integrations: [
+    starlight({
+      title: 'Starlight',
+      locales,
+    }),
+  ],
+});`,
+        readJSONSpy,
+      ),
+  ).rejects.toThrowError('Failed to find valid locales configuration in Starlight configuration.')
+
+  expect(readJSONSpy).not.toHaveBeenCalled()
+})
+
+test('does not read non relative JSON locales configuration', async () => {
+  const readJSONSpy = vi.fn()
+
+  await expect(
+    async () =>
+      await getStarlightLocalesTestConfigFromCode(
+        `import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+import locales from 'pkg/locales.json';
+
+export default defineConfig({
+  integrations: [
+    starlight({
+      title: 'Starlight',
+      locales,
+    }),
+  ],
+});`,
+        readJSONSpy,
+      ),
+  ).rejects.toThrowError('Failed to find valid locales configuration in Starlight configuration.')
+
+  expect(readJSONSpy).not.toHaveBeenCalled()
+})
+
+function getStarlightLocalesTestConfigFromCode(
+  code: string,
+  readJSON?: Parameters<typeof getStarlightLocalesConfigFromCode>[1],
+) {
+  return getStarlightLocalesConfigFromCode(code, readJSON ?? (() => Promise.resolve('test')))
+}

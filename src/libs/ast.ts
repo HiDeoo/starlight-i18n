@@ -13,15 +13,19 @@ import {
   isVariableDeclaration,
   isExportNamedDeclaration,
   type Identifier,
+  isImportDeclaration,
+  isImportDefaultSpecifier,
+  isExportDefaultDeclaration,
+  type ImportDeclaration,
 } from '@babel/types'
 
 import type { Locale, LocalesConfig } from './config'
 
-export function getStarlightLocalesConfigFromCode(code: string) {
+export async function getStarlightLocalesConfigFromCode(code: string, readJSON: JSONReader) {
   const ast = parseCode(code)
   const starlightConfig = getStarlightConfig(ast)
 
-  const locales = getStarlightLocalesConfig(ast, starlightConfig)
+  const locales = await getStarlightLocalesConfig(ast, starlightConfig, readJSON)
   const defaultLocale =
     getStarlightDefaultLocaleConfig(starlightConfig) ??
     Object.entries(locales).find(([name]) => name === 'root')?.[1].lang
@@ -115,7 +119,7 @@ function getStarlightConfig(ast: File) {
   return starlightConfig
 }
 
-function getStarlightLocalesConfig(ast: File, starlightConfig: ObjectExpression) {
+async function getStarlightLocalesConfig(ast: File, starlightConfig: ObjectExpression, readJSON: JSONReader) {
   const localesProperty = starlightConfig.properties.find(
     (property) =>
       isObjectProperty(property) &&
@@ -132,7 +136,7 @@ function getStarlightLocalesConfig(ast: File, starlightConfig: ObjectExpression)
   }
 
   const localesObjectExpression = isIdentifier(localesProperty.value)
-    ? getObjectExpressionFromIdentifier(ast, localesProperty.value)
+    ? await getObjectExpressionFromIdentifier(ast, localesProperty.value, readJSON)
     : localesProperty.value
 
   if (!localesObjectExpression) {
@@ -189,7 +193,7 @@ function getStarlightDefaultLocaleConfig(starlightConfig: ObjectExpression) {
     : undefined
 }
 
-function getObjectExpressionFromIdentifier(ast: File, identifier: Identifier) {
+async function getObjectExpressionFromIdentifier(ast: File, identifier: Identifier, readJSON: JSONReader) {
   let objectExpression: ObjectExpression | undefined
 
   for (const bodyNode of ast.program.body) {
@@ -198,6 +202,14 @@ function getObjectExpressionFromIdentifier(ast: File, identifier: Identifier) {
       : isExportNamedDeclaration(bodyNode) && isVariableDeclaration(bodyNode.declaration)
       ? bodyNode.declaration
       : undefined
+
+    if (isImportDeclaration(bodyNode)) {
+      const jsonObjectExpression = await tryGetObjectExpressionFromJSONImport(readJSON, identifier, bodyNode)
+
+      if (jsonObjectExpression) {
+        return jsonObjectExpression
+      }
+    }
 
     if (!variableDeclaration) {
       continue
@@ -224,3 +236,51 @@ function isLocaleObject(obj: unknown): obj is Locale {
 function getObjectPropertyName(property: ObjectProperty) {
   return isIdentifier(property.key) ? property.key.name : isStringLiteral(property.key) ? property.key.value : undefined
 }
+
+async function tryGetObjectExpressionFromJSONImport(
+  readJSON: JSONReader,
+  identifier: Identifier,
+  importDeclaration: ImportDeclaration,
+) {
+  const identifierDefaultSPecifier = importDeclaration.specifiers.find(
+    (specifier) => isImportDefaultSpecifier(specifier) && specifier.local.name === identifier.name,
+  )
+
+  if (!identifierDefaultSPecifier) {
+    return
+  }
+
+  const source = importDeclaration.source.value
+
+  if (!source.endsWith('.json') || !source.startsWith('.')) {
+    return
+  }
+
+  const jsonStr = await readJSON(source)
+
+  if (jsonStr.trim().length === 0) {
+    throw new Error('The imported JSON locales configuration is empty.')
+  }
+
+  try {
+    const jsonAST = parse(`export default ${jsonStr}`, { sourceType: 'unambiguous', plugins: ['typescript'] })
+
+    if (jsonAST.errors.length > 0) {
+      throw new Error(`The imported JSON locales configuration contains errors.`)
+    }
+
+    if (
+      jsonAST.program.body.length !== 1 ||
+      !isExportDefaultDeclaration(jsonAST.program.body[0]) ||
+      !isObjectExpression(jsonAST.program.body[0].declaration)
+    ) {
+      return
+    }
+
+    return jsonAST.program.body[0].declaration
+  } catch (error) {
+    throw new Error('Failed to parse imported JSON locales configuration.', { cause: error })
+  }
+}
+
+type JSONReader = (relativePath: string) => Promise<string>

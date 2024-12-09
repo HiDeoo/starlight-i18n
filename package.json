@@ -13,8 +13,7 @@
     "vscode:ls": "pnpx vsce ls --no-dependencies",
     "vscode:package": "pnpx vsce package --no-dependencies",
     "vscode:publish": "pnpx vsce publish --no-dependencies",
-    "vscode:prepublish": "pnpm build",
-    "prepare": "husky install"
+    "vscode:prepublish": "pnpm build"
   },
   "dependencies": {
     "@babel/parser": "7.22.16",
@@ -30,8 +29,6 @@
     "@types/vscode": "1.81.0",
     "esbuild": "0.19.2",
     "eslint": "8.49.0",
-    "husky": "8.0.3",
-    "lint-staged": "14.0.1",
     "prettier": "3.0.3",
     "rimraf": "5.0.1",
     "typescript": "5.2.2",
@@ -114,9 +111,5 @@
       "description": "License"
     }
   ],
-  "prettier": "@hideoo/prettier-config",
-  "lint-staged": {
-    "**/*": "prettier -w -u --cache",
-    "**/*.{js,jsx,ts,tsx,cjs,mjs}": "eslint --cache --max-warnings=0"
-  }
+  "prettier": "@hideoo/prettier-config"
 }

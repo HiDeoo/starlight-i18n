@@ -1,4 +1,4 @@
-import { parse } from '@babel/parser'
+import { parse, type ParseResult } from '@babel/parser'
 import traverse from '@babel/traverse'
 import {
   isCallExpression,
@@ -20,9 +20,17 @@ import {
 } from '@babel/types'
 
 import type { Locale, LocalesConfig } from './config'
+import { StarlightI18nParseError } from './error'
 
 export async function getStarlightLocalesConfigFromCode(code: string, readJSON: JSONReader) {
-  const ast = parseCode(code)
+  let ast: ParseResult<File>
+
+  try {
+    ast = parseCode(code)
+  } catch (error) {
+    throw new StarlightI18nParseError(error)
+  }
+
   const starlightConfig = getStarlightConfig(ast)
 
   const locales = await getStarlightLocalesConfig(ast, starlightConfig, readJSON)

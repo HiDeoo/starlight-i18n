@@ -1,7 +1,8 @@
-import { commands, type ExtensionContext, window, workspace } from 'vscode'
+import { commands, type ExtensionContext, Uri, window, workspace } from 'vscode'
 
 import { getStarlightLocalesConfig, getStarlightUris } from './libs/config'
 import { getContentPagesStatuses } from './libs/content'
+import { StarlightI18nParseError } from './libs/error'
 import { pickTranslation, prepareTranslation } from './libs/translation'
 import { isWorkspaceWithSingleFolder } from './libs/vsc'
 
@@ -35,13 +36,42 @@ export function activate(context: ExtensionContext): void {
         await prepareTranslation(starlightUris, translation)
       } catch (error) {
         const isError = error instanceof Error
-        const message = isError ? error.message : 'Something went wrong!'
+        const isParseError = error instanceof StarlightI18nParseError
+        const message = isParseError || isError ? error.message : 'Something went wrong!'
 
         const logger = window.createOutputChannel('Starlight i18n')
         logger.appendLine(message)
 
         if (isError && error.stack) {
           logger.appendLine(error.stack)
+        }
+
+        if ((isError || isParseError) && error.cause) {
+          const cause = error.cause
+          const isCauseError = cause instanceof Error
+          logger.appendLine(isCauseError ? cause.message : String(cause))
+          if (isCauseError && cause.stack) logger.appendLine(cause.stack)
+        }
+
+        if (isParseError) {
+          const reportLabel = 'Report on GitHub'
+
+          const selection = await window.showErrorMessage(
+            message,
+            {
+              detail:
+                'This error is likely due to an unexpected Starlight configuration format. Please consider reporting it so we can improve compatibility.',
+              modal: true,
+            },
+            reportLabel,
+          )
+          if (selection !== reportLabel) return
+
+          await commands.executeCommand(
+            'vscode.open',
+            Uri.parse('https://github.com/HiDeoo/starlight-i18n/issues/new?template=0_bug_report.yml'),
+          )
+          return
         }
 
         await window.showErrorMessage(message)

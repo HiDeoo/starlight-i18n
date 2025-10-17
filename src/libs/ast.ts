@@ -23,7 +23,7 @@ import type { Locale, LocalesConfig } from './config'
 import { StarlightI18nParseError } from './error'
 
 export async function getStarlightLocalesConfigFromCode(code: string, readJSON: JSONReader) {
-  let ast: ParseResult<File>
+  let ast: ParseResult
 
   try {
     ast = parseCode(code)
@@ -63,7 +63,7 @@ export async function getStarlightLocalesConfigFromCode(code: string, readJSON: 
 function parseCode(code: string) {
   const result = parse(code, { sourceType: 'unambiguous', plugins: ['typescript'] })
 
-  if (result.errors.length > 0) {
+  if (result.errors && result.errors.length > 0) {
     throw new Error(`Failed to parse Astro configuration file: ${JSON.stringify(result.errors)}`)
   }
 
@@ -273,7 +273,7 @@ async function tryGetObjectExpressionFromJSONImport(
   try {
     const jsonAST = parse(`export default ${jsonStr}`, { sourceType: 'unambiguous', plugins: ['typescript'] })
 
-    if (jsonAST.errors.length > 0) {
+    if (jsonAST.errors && jsonAST.errors.length > 0) {
       throw new Error(`The imported JSON locales configuration contains errors.`)
     }
 

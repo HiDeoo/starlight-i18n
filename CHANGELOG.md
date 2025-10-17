@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### 🐞 Bug Fixes
 
 - Improves experience when failing to parse the Starlight configuration.
+- Fixes an issue when parsing configuration files containing import attributes.
 
 ## v0.2.0
 

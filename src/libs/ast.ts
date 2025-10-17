@@ -1,4 +1,4 @@
-import { parse } from '@babel/parser'
+import { parse, type ParseResult } from '@babel/parser'
 import traverse from '@babel/traverse'
 import {
   isCallExpression,
@@ -20,9 +20,17 @@ import {
 } from '@babel/types'
 
 import type { Locale, LocalesConfig } from './config'
+import { StarlightI18nParseError } from './error'
 
 export async function getStarlightLocalesConfigFromCode(code: string, readJSON: JSONReader) {
-  const ast = parseCode(code)
+  let ast: ParseResult
+
+  try {
+    ast = parseCode(code)
+  } catch (error) {
+    throw new StarlightI18nParseError(error)
+  }
+
   const starlightConfig = getStarlightConfig(ast)
 
   const locales = await getStarlightLocalesConfig(ast, starlightConfig, readJSON)
@@ -55,7 +63,7 @@ export async function getStarlightLocalesConfigFromCode(code: string, readJSON: 
 function parseCode(code: string) {
   const result = parse(code, { sourceType: 'unambiguous', plugins: ['typescript'] })
 
-  if (result.errors.length > 0) {
+  if (result.errors && result.errors.length > 0) {
     throw new Error(`Failed to parse Astro configuration file: ${JSON.stringify(result.errors)}`)
   }
 
@@ -265,7 +273,7 @@ async function tryGetObjectExpressionFromJSONImport(
   try {
     const jsonAST = parse(`export default ${jsonStr}`, { sourceType: 'unambiguous', plugins: ['typescript'] })
 
-    if (jsonAST.errors.length > 0) {
+    if (jsonAST.errors && jsonAST.errors.length > 0) {
       throw new Error(`The imported JSON locales configuration contains errors.`)
     }
 

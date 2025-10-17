@@ -17,15 +17,15 @@
     "vscode:prepublish": "pnpm build"
   },
   "dependencies": {
-    "@babel/parser": "7.22.16",
-    "@babel/traverse": "7.22.20",
-    "@babel/types": "7.22.19"
+    "@babel/parser": "7.28.4",
+    "@babel/traverse": "7.28.4",
+    "@babel/types": "7.28.4"
   },
   "devDependencies": {
     "@hideoo/eslint-config": "2.0.1",
     "@hideoo/prettier-config": "2.0.0",
     "@hideoo/tsconfig": "2.0.1",
-    "@types/babel__traverse": "7.20.2",
+    "@types/babel__traverse": "7.28.0",
     "@types/node": "18.17.15",
     "@types/vscode": "1.81.0",
     "esbuild": "0.19.2",

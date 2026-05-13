@@ -38,7 +38,7 @@
   "engines": {
     "vscode": "^1.81.0"
   },
-  "packageManager": "pnpm@8.7.5",
+  "packageManager": "pnpm@11.1.1",
   "private": true,
   "sideEffects": false,
   "keywords": [

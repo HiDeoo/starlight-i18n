@@ -1,5 +1,9 @@
 allowBuilds:
   esbuild: false
+  unrs-resolver: false
 
 # Prevent installing packages published in the last 3 days.
 minimumReleaseAge: 4320
+
+minimumReleaseAgeExclude:
+  - '@hideoo/eslint-config@5.2.1'

@@ -17,7 +17,7 @@ export async function getFileChanges(file: Uri): Promise<GitFileChanges> {
   }
 
   const previousCommit =
-    commits.find((commit) => !ignoredCommitPattern.test(commit.message.split('\n')[0] ?? '')) ?? lastCommit
+    commits.find((commit) => !ignoredCommitPattern.test(commit.message.split('\n', 1)[0] ?? '')) ?? lastCommit
 
   if (!lastCommit.commitDate || !previousCommit.commitDate) {
     throw new Error(`Failed to find commit dates for the file at '${file.fsPath}'.`)
@@ -66,7 +66,7 @@ async function getRepository(): Promise<Repository> {
   const git = await getGitExtension()
   const repo = git.repositories[0]
 
-  if (git.repositories.length === 1 && repo) {
+  if (repo && git.repositories.length === 1) {
     return repo
   }
 

@@ -1,3 +1,5 @@
+import { inspect } from 'node:util'
+
 import { commands, type ExtensionContext, Uri, window, workspace } from 'vscode'
 
 import { getStarlightLocalesConfig, getStarlightUris } from './libs/config'
@@ -49,7 +51,7 @@ export function activate(context: ExtensionContext): void {
         if ((isError || isParseError) && error.cause) {
           const cause = error.cause
           const isCauseError = cause instanceof Error
-          logger.appendLine(isCauseError ? cause.message : String(cause))
+          logger.appendLine(isCauseError ? cause.message : inspect(cause))
           if (isCauseError && cause.stack) logger.appendLine(cause.stack)
         }
 

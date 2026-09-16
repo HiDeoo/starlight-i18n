@@ -1,4 +1,4 @@
-import { relative } from 'node:path'
+import path from 'node:path'
 
 import { type Uri, workspace } from 'vscode'
 
@@ -43,7 +43,7 @@ export async function getContentPagesStatuses(uris: StarlightUris, localesConfig
 export async function getPageRawFrontmatter(page: Uri) {
   const data = await workspace.fs.readFile(page)
   const content = Buffer.from(data).toString('utf8')
-  const matches = content.match(/^(---\n[\S\s]*?\n---)\n/)
+  const matches = /^(---\n[\S\s]*?\n---)\n/.exec(content)
 
   return matches ? matches[1] : ''
 }
@@ -65,7 +65,7 @@ async function getContentPagesByLocale(uris: StarlightUris, localesConfig: Local
 
 async function getContentPages(uris: StarlightUris, localesConfig: LocalesConfig): Promise<Page[]> {
   const files = await workspace.findFiles(
-    `${relative(uris.workspace.fsPath, uris.content.fsPath)}/**/*.{${contentExtensions.join(',')}}`,
+    `${path.relative(uris.workspace.fsPath, uris.content.fsPath)}/**/*.{${contentExtensions.join(',')}}`,
     null,
   )
 
@@ -73,7 +73,7 @@ async function getContentPages(uris: StarlightUris, localesConfig: LocalesConfig
 
   return Promise.all(
     files.map(async (file) => {
-      const relativePath = relative(uris.content.fsPath, file.fsPath)
+      const relativePath = path.relative(uris.content.fsPath, file.fsPath)
       const [localeDirectory, ...localeId] = relativePath.split('/')
       const localeEntry = allLocales.find(([directory]) => directory === localeDirectory)
       const changes = await getFileChanges(file)

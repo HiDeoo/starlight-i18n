@@ -8,7 +8,7 @@
   "scripts": {
     "build": "pnpm clean && node esbuild.config.mjs",
     "test": "vitest",
-    "lint": "eslint . --max-warnings=0 && tsc --noEmit",
+    "lint": "eslint . --cache --max-warnings=0 && tsc --noEmit",
     "format": "prettier -w --cache --ignore-unknown .",
     "clean": "rimraf dist",
     "vscode:ls": "pnpx vsce ls --no-dependencies",

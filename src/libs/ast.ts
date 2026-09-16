@@ -48,7 +48,7 @@ export async function getStarlightLocalesConfigFromCode(code: string, readJSON: 
   }
 
   for (const [name, locale] of Object.entries(locales)) {
-    if (name !== localesConfig.defaultLocale && name !== 'root') {
+    if (name !== 'root' && name !== localesConfig.defaultLocale) {
       localesConfig.locales[name] = locale
     }
   }
@@ -250,11 +250,11 @@ async function tryGetObjectExpressionFromJSONImport(
   identifier: Identifier,
   importDeclaration: ImportDeclaration,
 ) {
-  const identifierDefaultSPecifier = importDeclaration.specifiers.find(
+  const hasDefaultImport = importDeclaration.specifiers.some(
     (specifier) => isImportDefaultSpecifier(specifier) && specifier.local.name === identifier.name,
   )
 
-  if (!identifierDefaultSPecifier) {
+  if (!hasDefaultImport) {
     return
   }
 

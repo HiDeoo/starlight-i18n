@@ -1,4 +1,4 @@
-import { dirname } from 'node:path'
+import path from 'node:path'
 
 import { FileType, Uri, workspace, type WorkspaceFolder } from 'vscode'
 
@@ -19,7 +19,7 @@ export async function getStarlightUris(
 
   return {
     config,
-    content: Uri.joinPath(Uri.file(dirname(config.fsPath)), 'src', 'content', 'docs'),
+    content: Uri.joinPath(Uri.file(path.dirname(config.fsPath)), 'src', 'content', 'docs'),
     workspace: workspaceFolder.uri,
   }
 }

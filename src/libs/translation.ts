@@ -68,7 +68,7 @@ export async function pickTranslation(
           statuses,
         }))
       } catch (error) {
-        reject(error)
+        reject(error instanceof Error ? error : new Error('Failed to get translation statuses.', { cause: error }))
         return
       }
 

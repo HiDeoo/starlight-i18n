@@ -5,6 +5,7 @@
 .prettierignore
 .vscode
 esbuild.config.mjs
+eslint.config.mjs
 pnpm-lock.yaml
 src
 starlight-i18n-**.vsix
